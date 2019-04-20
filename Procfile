@@ -1,1 +1,1 @@
-web: hypercorn api:app -b 127.0.0.1:${PORT:-5000}
+web: hypercorn api:app -b 0.0.0.0:${PORT:-5000}
