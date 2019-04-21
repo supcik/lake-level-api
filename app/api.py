@@ -93,7 +93,7 @@ async def previsions(page, url):
 
 @app.route('/data')
 async def data():
-    browser = await launch()
+    browser = await launch(args=['--no-sandbox'])
     page = await browser.newPage()
 
     main_data = await main_table(
