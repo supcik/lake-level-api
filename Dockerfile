@@ -11,6 +11,11 @@ RUN apt-get update && apt-get install -y \
       libxtst6 \
   && python -m pip install --upgrade pip setuptools
 
+
+ADD https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 /usr/local/bin/dumb-init
+RUN chmod +x /usr/local/bin/dumb-init
+ENTRYPOINT ["dumb-init", "--"]
+
 RUN python -m pip install \
   hypercorn \
   pyppeteer \
@@ -19,5 +24,5 @@ RUN python -m pip install \
 COPY app /app
 WORKDIR /app
 
-ENTRYPOINT []
+#ENTRYPOINT []
 CMD hypercorn api:app -b 0.0.0.0:${PORT:-5000}
