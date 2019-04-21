@@ -21,7 +21,7 @@ import pprint
 import re
 
 from pyppeteer import launch
-from quart import Quart
+from quart import Quart, request
 from quart.logging import create_logger
 
 app = Quart(__name__)
@@ -91,8 +91,9 @@ async def previsions(page, url):
     return dict(zip(days, pairs))
 
 
-@app.route('/data')
+@app.route('/v1/data')
 async def data():
+    pretty = request.args.get('pretty')
     browser = await launch(args=['--no-sandbox'])
     page = await browser.newPage()
 
@@ -107,7 +108,11 @@ async def data():
     )
 
     await browser.close()
-    return json.dumps(main_data)
+    if pretty:
+        return json.dumps(main_data, indent=2)
+    else:
+        return json.dumps(main_data)
+
 
 if __name__ == "__main__":
     app.run(debug=False)
